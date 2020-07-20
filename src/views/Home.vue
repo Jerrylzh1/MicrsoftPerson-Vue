@@ -26,7 +26,8 @@
                         <!--菜单导航需要进行:index的绑定-->
                         <el-submenu :index="index+''" v-for="(item,index) in routes" :key="index" >
                             <template slot="title" v-if="!item.hidden">
-                                <i class="el-icon-location"></i>
+                                <!--导航列表的图标-->
+                                <i :class="item.iconCls"></i>
                                 <span>{{item.name}}</span>
                             </template>
                             <el-menu-item-group>
@@ -36,7 +37,14 @@
                     </el-menu>
                 </el-aside>
                 <el-main>
-                    <router-view/>
+                    <el-breadcrumb separator-class="el-icon-arrow-right" v-if="this.$router.currentRoute.path!='/home'">
+                        <el-breadcrumb-item :to="{ path: '/home' }">首页</el-breadcrumb-item>
+                        <el-breadcrumb-item>{{this.$router.currentRoute.name}}</el-breadcrumb-item>
+                    </el-breadcrumb>
+                    <div class="homeWelcome" v-if="this.$router.currentRoute.path=='/home'">
+                        欢迎来到微人事！！！
+                    </div>
+                    <router-view class="RouterViewClass"/>
                 </el-main>
             </el-container>
         </el-container>
@@ -78,6 +86,8 @@
                     }).then(() => {
                         this.getRequest("/logout");
                         window.sessionStorage.removeItem("user");
+                        //登出的时候进行清空store状态
+                        this.$store.commit('initRoutes', []);
                         this.$router.replace("/");
                     }).catch(() => {
                         this.$message({
@@ -98,6 +108,16 @@
 </script>
 
 <style>
+    .RouterViewClass{
+        margin-top: 20px;
+    }
+    .homeWelcome{
+        text-align: center;
+        font-size: 30px;
+        font-family: 华文楷体;
+        color: #3facff;
+        padding-top: 50px;
+    }
     .HeaderColor{
         background-color: #452aff;
         display: flex;

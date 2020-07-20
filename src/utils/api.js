@@ -1,6 +1,7 @@
 import axios from "axios"
 import {Message} from 'element-ui';
-import router from '../router'
+import router from "../router";
+
 
 //axios.defaults.baseURL='http://localhost:8081/'
 //进行地址访问的卡控 服务器返回的数据信息进行展示

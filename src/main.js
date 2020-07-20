@@ -10,6 +10,7 @@ import {putRequest} from "./utils/api";
 import {getRequest} from "./utils/api";
 import {deleteRequest} from "./utils/api";
 import {initMenu} from "./utils/menus";
+import 'font-awesome/css/font-awesome.min.css'
 
 Vue.prototype.postRequest=postRequest;
 Vue.prototype.postValueRequest=postValueRequest;
@@ -19,16 +20,25 @@ Vue.prototype.deleteRequest=deleteRequest;
 
 
 Vue.config.productionTip = false
-Vue.use(ElementUI);
+Vue.use(ElementUI,{size:'small'});
 
 router.beforeEach((to, from, next) => {
+  console.log(to.path+"####"+from.path)
   //如果去登录页面
   if (to.path==='/'){
+    console.log("登录首页")
     next();
-  }
-  else {
-    initMenu(router,store);
-    next();
+  } else {
+    if(window.sessionStorage.getItem("user")){
+      console.log("有用户资料")
+      initMenu(router,store);
+      next();
+    }else{
+      console.log(to);
+      //没有登录 进行跳转到登录界面
+      next("/?redirect"+to.path);
+    }
+
   }
 })
 

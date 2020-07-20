@@ -8,7 +8,7 @@
             </el-form-item>
             <el-form-item prop="password">
                 <el-input type="password" v-model="loginForm.password" auto-complete="off"
-                          aria-placeholder="请输入密码"></el-input>
+                          aria-placeholder="请输入密码" @keydown.enter.native="submitForm"></el-input>
             </el-form-item>
             <el-checkbox v-model="checked"></el-checkbox>
             <el-button type="primary" style="width: 100%" @click="submitForm">登录</el-button>
@@ -45,8 +45,9 @@
                         this.postValueRequest('doLogin', this.loginForm).then(resp => {
                             if (resp) {
                                 console.log(resp);
-                                window.sessionStorage.setItem("user",JSON.stringify(resp.obj));
-                                this.$router.replace('/home');
+                                window.sessionStorage.setItem("user", JSON.stringify(resp.obj));
+                                let path = this.$route.query.redirect;
+                                this.$router.replace(path == '/' || path == undefined ? '/home' : path);
                                 // console.log(resp.data)
                                 // alert(JSON.stringify(resp))
                             }
